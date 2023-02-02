@@ -1,6 +1,6 @@
 class Api {
   constructor(name) {
-    this.url = "https://sb-cats.herokuapp.com/api/2/";
+    this.url = "https://cats.petiteweb.dev/api/single/";
     this.name = name;
   }
   getCats() {

@@ -69,6 +69,7 @@ main {
 }
 
 .card {
+    position: relative;
     padding: 20px;
     text-align: center;
     background: url(images/cat.jpg) no-repeat center / cover;
@@ -235,4 +236,9 @@ form button:active {
     background-color: #0006;
     color: #fff;
     box-shadow: 0 0 2px 0 #0004;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
 }

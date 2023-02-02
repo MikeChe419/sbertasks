@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://kit.fontawesome.com/3e2b3d0dcf.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="scripts/api.js"></script>
+    <script src="scripts/js.cookie.js"></script>
+</head>
+<body>
+    <main class="container">
+        <h2>Изменить питомца</h2>
+            <form class="change-form" action="">
+                <div class="form-img"></div>
+                <input id="id" type="number" name="id" min="1" required placeholder="id">
+                <input id="age" type="number" name="age" placeholder="Возраст">
+                <input id="name" type="text" name="name" required placeholder="Имя">
+                <input id="rate" type="number" name="rate" placeholder="Рейтинг (0-10)" min="0" max="10">
+                <textarea id="descr" name="description" placeholder="Описание"></textarea>
+                <label>Любимчик <input type="checkbox" name="favourite" placeholder=""></label>
+                <input id="img-link" type="text" name="img_link" placeholder="Ссылка на фото">
+                <button type="submit">Отправить изменения</button>
+            </form>
+    </main>
+    <script src="scripts/index.js"></script>
+</body>
+</html>
