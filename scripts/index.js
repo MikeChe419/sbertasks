@@ -1,24 +1,16 @@
 const api = new Api("lyakh");
 let catsData = localStorage.getItem("cats");
-
 const updCards = function(data, container) {
   data.forEach((cat) => {
     const card = document.createElement('a');
     const btn = document.createElement('button');
     btn.setAttribute('type', 'submit')
     const fa = document.createElement('i');
-    let img = {}
-    let URLArr = JSON.parse(localStorage.getItem("catsimg"));
-    if (URLArr !== undefined || null) {
-      img = URLArr.find(img => img.id == cat.id)
-    }
+
     card.setAttribute('href', `/cat.html?=${cat.id}`)
-    card.setAttribute('target', 'blank');
-     if (img.url !== undefined) {
-       card.setAttribute('style', `background-image: url(${img.url });`);
-     } else {
-      card.setAttribute('style', `background-image: url("images/cat.jpg");`)
-     }
+    card.setAttribute('target', 'blank')
+    card.setAttribute('style', `background-image: url("images/cat.jpg");`)
+
     fa.classList.add('fa-solid', 'fa-xmark');
     btn.classList.add('remove-btn');
     if (cat.favourite) {
@@ -44,12 +36,6 @@ const updCards = function(data, container) {
       card
     } 
   });
-  // document.querySelectorAll('.card').forEach(el => {
-  //   el.addEventListener('click', () => {
-  //     const catName = el.querySelector('span').textContent;
-  //     let find = catsData.find(item => item.name == catName);
-  //   })
-  // })
 }
 
 
@@ -98,7 +84,6 @@ const getCats = function (api, store) {
       });
 };
 getCats(api, catsData);
-
 let form = document.forms[0];
 form.img_link.addEventListener("change", (e) => {
   form.firstElementChild.style.backgroundImage = `url(${e.target.value})`;
@@ -110,17 +95,6 @@ form.addEventListener("submit", (e) => {
   e.preventDefault();
   let body = {};
   createBodyRequest(form, body)
-  let  arrURL = JSON.parse(localStorage.getItem('catsimg'))
-  let  URL = {
-    id: body.id,
-    url: body.img_link
-  }
-  if (arrURL == null) {
-    arrURL = [];
-  }
-  arrURL.push(URL)
-
-  localStorage.setItem('catsimg', JSON.stringify(arrURL))
   api
     .addCat(body)
     .then((res) => res.json())
@@ -145,50 +119,50 @@ form.addEventListener("submit", (e) => {
           });
       }
     });
-
     popupForm.classList.remove("active");
     popupForm.parentElement.classList.remove("active");
   });
 } else {
   function UpdateCats() {
     let ID = (window.location.search).slice(2);
-    let URLArr = JSON.parse(localStorage.getItem("catsimg"));
-    let find = URLArr.find(item => item.id == ID)
+  
     const inptutID = document.querySelector('#id');
     const inputAge = document.querySelector('#age');
     const inputCatName = document.querySelector('#name');
     const inputRate = document.querySelector('#rate');
-    const inputDescr = document.querySelector('#descr')
-    const img = document.querySelector('.form-img')
-    const imgLink = document.querySelector('#img-link')
+    const inputDescr = document.querySelector('#descr');
+
+    const btn = document.querySelector('button');
     inptutID.readOnly = true;
-    img.setAttribute('style', `background-image: url(${find.url})`)
+    if (!inptutID.value) {
+      btn.setAttribute('disabled', 'disabled');
+    } 
     api.getCat(ID)
       .then(resp => resp.json())
       .then(data => {
         console.log(data)
-        inptutID.value = data.id;
+        inptutID.value = Number(data.id);
+        btn.removeAttribute('disabled');
         inputAge.value = data.age;
         inputCatName.value = data.name;
         inputRate.value = data.rate;
-        inputDescr.value = data.description
-        imgLink.value = find.url
+        if (data.description) inputDescr.value = data.description
         document.querySelector('button').addEventListener('click', (e)=> {
           e.preventDefault();
           let body = {};
           let form = document.forms[0];
-          createBodyRequest(form, body) ;
-          URLArr.splice(find, 1);
-          find = {
-             id: ID,
-             url: document.querySelector('#img-link').value
-          }
-          URLArr.push(find);
-          localStorage.setItem('catsimg', JSON.stringify(URLArr))
+          createBodyRequest(form, body);
+          console.log(index, URLArr);
+          catsData = JSON.parse(localStorage.getItem("cats"))
+          let findCat = catsData.findIndex(item => item.id == ID);
+          catsData.splice(findCat, 1)
           api.updCat(ID, body)
           .then(r => r.json())
           .then(data => {
             console.log(data)
+            catsData.push(data);
+            localStorage.setItem('cats', JSON.stringify(catsData));
+            
             form.reset();
             UpdateCats()
           })
