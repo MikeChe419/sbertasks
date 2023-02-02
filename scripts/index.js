@@ -1,5 +1,6 @@
 const api = new Api("lyakh");
 let catsData = localStorage.getItem("cats");
+
 const updCards = function(data, container) {
   data.forEach((cat) => {
     const card = document.createElement('a');
@@ -125,13 +126,11 @@ form.addEventListener("submit", (e) => {
 } else {
   function UpdateCats() {
     let ID = (window.location.search).slice(2);
-  
     const inptutID = document.querySelector('#id');
     const inputAge = document.querySelector('#age');
     const inputCatName = document.querySelector('#name');
     const inputRate = document.querySelector('#rate');
     const inputDescr = document.querySelector('#descr');
-
     const btn = document.querySelector('button');
     inptutID.readOnly = true;
     if (!inptutID.value) {
@@ -152,19 +151,17 @@ form.addEventListener("submit", (e) => {
           let body = {};
           let form = document.forms[0];
           createBodyRequest(form, body);
-          console.log(index, URLArr);
           catsData = JSON.parse(localStorage.getItem("cats"))
           let findCat = catsData.findIndex(item => item.id == ID);
-          catsData.splice(findCat, 1)
+          catsData.splice(findCat, 1);
           api.updCat(ID, body)
           .then(r => r.json())
           .then(data => {
             console.log(data)
             catsData.push(data);
             localStorage.setItem('cats', JSON.stringify(catsData));
-            
             form.reset();
-            UpdateCats()
+            UpdateCats();
           })
         })
       })
