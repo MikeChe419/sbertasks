@@ -1,6 +1,5 @@
 const api = new Api("lyakh");
 let catsData = localStorage.getItem("cats");
-let URLArr = [] 
 
 const updCards = function(data, container) {
   data.forEach((cat) => {
@@ -9,13 +8,17 @@ const updCards = function(data, container) {
     btn.setAttribute('type', 'submit')
     const fa = document.createElement('i');
     let img = {}
-    URLArr = JSON.parse(localStorage.getItem("catsimg"));
-    if (URLArr.find(img => img.id == cat.id) !== null ) {
+    let URLArr = JSON.parse(localStorage.getItem("catsimg"));
+    if (URLArr !== undefined || null) {
       img = URLArr.find(img => img.id == cat.id)
     }
     card.setAttribute('href', `/cat.html?=${cat.id}`)
     card.setAttribute('target', 'blank');
-    card.setAttribute('style', `background-image: url(${img.url || "images/cat.jpg"});`);
+     if (img.url !== undefined) {
+       card.setAttribute('style', `background-image: url(${img.url });`);
+     } else {
+      card.setAttribute('style', `background-image: url("images/cat.jpg");`)
+     }
     fa.classList.add('fa-solid', 'fa-xmark');
     btn.classList.add('remove-btn');
     if (cat.favourite) {
@@ -38,8 +41,7 @@ const updCards = function(data, container) {
       card.remove();
     });
     return {
-      card,
-      URLArr
+      card
     } 
   });
   // document.querySelectorAll('.card').forEach(el => {
@@ -108,12 +110,16 @@ form.addEventListener("submit", (e) => {
   e.preventDefault();
   let body = {};
   createBodyRequest(form, body)
-  let arrURL = JSON.parse(localStorage.getItem("catsimg"))
+  let  arrURL = JSON.parse(localStorage.getItem('catsimg'))
   let  URL = {
     id: body.id,
     url: body.img_link
   }
+  if (arrURL == null) {
+    arrURL = [];
+  }
   arrURL.push(URL)
+
   localStorage.setItem('catsimg', JSON.stringify(arrURL))
   api
     .addCat(body)
@@ -146,7 +152,7 @@ form.addEventListener("submit", (e) => {
 } else {
   function UpdateCats() {
     let ID = (window.location.search).slice(2);
-    URLArr = JSON.parse(localStorage.getItem("catsimg"));
+    let URLArr = JSON.parse(localStorage.getItem("catsimg"));
     let find = URLArr.find(item => item.id == ID)
     const inptutID = document.querySelector('#id');
     const inputAge = document.querySelector('#age');
@@ -180,11 +186,14 @@ form.addEventListener("submit", (e) => {
           URLArr.push(find);
           localStorage.setItem('catsimg', JSON.stringify(URLArr))
           api.updCat(ID, body)
-          .then(data => console.log(data))
-          UpdateCats()
+          .then(r => r.json())
+          .then(data => {
+            console.log(data)
+            form.reset();
+            UpdateCats()
+          })
         })
       })
-      
   }
   UpdateCats()
 }
