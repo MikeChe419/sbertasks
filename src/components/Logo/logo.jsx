@@ -1,13 +1,19 @@
+import React from 'react'
+import { Link } from 'react-router-dom';
 import './index.css';
 import logoSrc from './logo.svg'
 
 function Logo({className, href, ...props}) {
-  console.log(props);
+  const hrefValue = href ? href : null;
   return (
-    <a href={href ? href : "#"} className={className ? className : "logo"} {...props}>
-        <img src={logoSrc} alt="Логотип компании" className='logo__pic' />
-    </a>
+     hrefValue 
+      ?  <Link to={{pathname: hrefValue}}  className={className ? className : "logo"}>
+            <img src={logoSrc} alt="Логотип компании" className='logo__pic' />
+        </Link>
+      : <a href='#'  className={className ? className : "logo"}>
+            <img src={logoSrc} alt="Логотип компании" className='logo__pic' />
+        </a>
   )
 }
 
-export default Logo;
+export default React.memo(Logo);

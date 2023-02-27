@@ -24,10 +24,15 @@ img {
 
 .content {
 	padding: 20px 0;
+	flex-grow: 1;
 }
 
 .content__sort {
 	margin-bottom: 40px;
 }
 
-
+#root {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
