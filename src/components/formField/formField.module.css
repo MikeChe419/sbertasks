@@ -1,0 +1,15 @@
+.errorMessage {
+    color: red;
+    font-size: 12px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input {
+    padding: 5px;
+    margin: 5px 0;
+    display: block;
+    width: 100%;
+}
